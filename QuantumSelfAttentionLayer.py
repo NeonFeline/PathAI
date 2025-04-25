@@ -18,6 +18,9 @@ class QuantumSelfAttentionLayer(nn.Module):
             in_features=orca_in_features,
             observable='avg-photons',
             gradient_mode='parameter-shift',
+            secret_key='quantum2025',
+            machine='ORCA-PT-1-A',
+            url='https://api.quantum.psnc.pl/api/client',
             n_samples=100,
             n_loops=2,
         )

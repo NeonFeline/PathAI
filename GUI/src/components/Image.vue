@@ -37,6 +37,11 @@ const labesls = ref({
   cae: 0.1,
 });
 
+function getMaxValuea() {
+  console.log(Math.max(...Object.values(labesls.value)));
+  return Math.max(...Object.values(labesls.value));
+}
+
 const dataBar = ref(getDataFromAPI());
 
 const imageSrc = ref("");
@@ -77,10 +82,9 @@ async function sendImageToAPI(data) {
   const arr = resp.value[0];
 
   for (let i = 0; i < arr.length; i++) {
-    console.log(i);
     labesls.value[labelList[i]] = arr[i];
   }
-  console.log(labesls.value);
+
   updateRank(resp.value);
   spinnerActive.value = false;
 }
@@ -152,7 +156,12 @@ const checkImage = (event) => {
             class="main__interface__data_point"
             v-for="(key, label) in labesls"
           >
-            <div class="main__interface__label">
+            <div
+              :class="{
+                main__interface__label: true,
+                'main__interface__label--selected': key >= getMaxValuea(),
+              }"
+            >
               {{ label }}
             </div>
             <div class="main__interface__bar__outer">
@@ -169,7 +178,7 @@ const checkImage = (event) => {
           @change="checkImage"
           id="file-input"
         />
-        <label for="file-input" class="main__interface__label"
+        <label for="file-input" class="main__interface__btn"
           >Choose Image</label
         >
       </div>
@@ -195,14 +204,16 @@ const checkImage = (event) => {
   ///////////
   // Main box
   &__box {
-    width: 51.2rem;
-    height: 51.2rem;
+    width: 46.2rem;
+    height: 46.2rem;
     overflow: hidden;
     position: relative;
     border: solid 2px var(--main-color);
+    border-radius: 8px;
+    box-shadow: 0 1rem 1rem rgba(0, 0, 0, 0.1);
 
     &__image {
-      width: 51.2rem;
+      width: 46.2rem;
     }
 
     &__spinner {
@@ -225,20 +236,15 @@ const checkImage = (event) => {
     display: flex;
     flex-direction: column;
     gap: 1.2rem;
-    margin-top: -9rem;
 
     &__input {
       display: none;
     }
 
-    &__label {
-      width: 22.4rem;
-    }
-
     &__bar {
       &__inner {
         height: 1.2rem;
-        background-color: red;
+        background-color: #ff6b6b;
         transition: all 0.2s;
       }
 
@@ -257,7 +263,32 @@ const checkImage = (event) => {
 
     &__label {
       font-size: 1.2rem;
-      color: #333;
+      text-align: start;
+      width: 22.4rem;
+      color: #777;
+      transition: all 0.2s;
+
+      &--selected {
+        color: #222;
+      }
+    }
+
+    &__btn {
+      font-size: 1.6rem;
+      color: #fff;
+      background-color: #ff6b6b;
+      padding: 0.6rem 1.2rem;
+      transition: all 0.2s;
+      cursor: pointer;
+      border-radius: 4px;
+      text-transform: uppercase;
+      justify-self: center;
+      box-shadow: 0 1rem 1rem rgba(0, 0, 0, 0.05);
+      text-align: center;
+
+      &:hover {
+        background-color: #f03e3e;
+      }
     }
 
     &__data_point {
